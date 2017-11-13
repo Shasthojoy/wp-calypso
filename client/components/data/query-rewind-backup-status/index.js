@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
  * Internal dependencies
  */
 import Interval, { EVERY_SECOND } from 'lib/interval';
-import { getRewindBackupProgress as getBackupProgress } from 'state/activity-log/actions';
+import { getRewindBackupProgress } from 'state/activity-log/actions';
 
 class QueryRewindBackupStatus extends Component {
 	static propTypes = {
@@ -19,11 +19,19 @@ class QueryRewindBackupStatus extends Component {
 		siteId: PropTypes.number.isRequired,
 	};
 
+	componentWillMount() {
+		const { siteId } = this.props;
+
+		if ( siteId ) {
+			this.props.getRewindBackupProgress( siteId );
+		}
+	}
+
 	query = () => {
 		const { downloadId, siteId } = this.props;
 
 		if ( siteId && downloadId ) {
-			this.props.getBackupProgress( siteId, downloadId );
+			this.props.getRewindBackupProgress( siteId, downloadId );
 		}
 	};
 
@@ -32,4 +40,4 @@ class QueryRewindBackupStatus extends Component {
 	}
 }
 
-export default connect( null, { getBackupProgress } )( QueryRewindBackupStatus );
+export default connect( null, { getRewindBackupProgress } )( QueryRewindBackupStatus );
